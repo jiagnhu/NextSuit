@@ -100,7 +100,7 @@ NEXT_PUBLIC_BASE_PATH=/nextsuit/blog
 ## 5. 数据库初始化
 
 ```bash
-cd /var/www/nextsuit
+cd /www/wwwroot/studio.tangyikai.top/NextSuit
 pnpm --filter @nextsuit/api prisma:generate
 pnpm --filter @nextsuit/api exec prisma migrate deploy
 pnpm --filter @nextsuit/api prisma:seed
@@ -109,25 +109,27 @@ pnpm --filter @nextsuit/api prisma:seed
 ## 6. 构建项目
 
 ```bash
-cd /var/www/nextsuit
+cd /www/wwwroot/studio.tangyikai.top/NextSuit
 pnpm --filter @nextsuit/api build
 pnpm --filter @nextsuit/admin-web build
 pnpm --filter @nextsuit/marketing-web build
 pnpm --filter @nextsuit/blog-web build
 ```
 
-## 7. PM2 启动（API + Admin + Marketing + Blog）
+## 7. PM2 启动（API + Marketing + Blog）
 
 项目已提供 PM2 配置文件：
 
 - `deploy/pm2/ecosystem.config.cjs`
 
-其中包含 4 个进程：`nextsuit-api`、`nextsuit-admin`、`nextsuit-marketing`、`nextsuit-blog`。
+其中包含 3 个进程：`nextsuit-api`、`nextsuit-marketing`、`nextsuit-blog`。
+
+说明：`admin-web` 不走 PM2，使用 Nginx 直接托管静态构建目录 `apps/admin-web/dist`。
 
 启动：
 
 ```bash
-cd /var/www/nextsuit
+cd /www/wwwroot/studio.tangyikai.top/NextSuit
 pm2 start deploy/pm2/ecosystem.config.cjs
 pm2 save
 pm2 startup
@@ -142,11 +144,13 @@ pm2 startup
 使用方式：
 
 ```bash
-sudo cp /var/www/nextsuit/deploy/nginx/studio.tangyikai.top.conf /etc/nginx/sites-available/studio.tangyikai.top
+sudo cp /www/wwwroot/studio.tangyikai.top/NextSuit/deploy/nginx/studio.tangyikai.top.conf /etc/nginx/sites-available/studio.tangyikai.top
 sudo ln -s /etc/nginx/sites-available/studio.tangyikai.top /etc/nginx/sites-enabled/studio.tangyikai.top
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+
+确保 `admin-web` 已执行过 `build`，且存在目录：`/www/wwwroot/studio.tangyikai.top/NextSuit/apps/admin-web/dist`。
 
 再配置 SSL（推荐 Certbot）：
 
@@ -168,5 +172,5 @@ sudo certbot --nginx -d studio.tangyikai.top
 
 1. Admin 登录 401：检查 API `CORS_ORIGIN` 是否为 `https://studio.tangyikai.top`。  
 2. 文章封面图不显示：检查 Nginx 是否代理了 `/nextsuit/uploads/`。  
-3. 刷新 Admin 子页面 404：检查 `nextsuit-admin` 进程是否启动，且 Nginx 已代理 `/nextsuit/admin/` 到 `18631`。  
+3. 刷新 Admin 子页面 404：检查 Nginx 中 `/nextsuit/admin/` 是否为静态目录映射，并且 `apps/admin-web/dist/index.html` 存在。  
 4. Next 资源 404：确认 `NEXT_PUBLIC_BASE_PATH` 和 `VITE_APP_BASE_PATH` 已设置并重新 build。

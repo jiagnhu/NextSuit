@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "nextsuit-api",
-      cwd: "/var/www/nextsuit",
+      cwd: "/www/wwwroot/studio.tangyikai.top/NextSuit",
       script: "pnpm",
       args: "--filter @nextsuit/api start",
       env: {
@@ -10,17 +10,8 @@ module.exports = {
       }
     },
     {
-      name: "nextsuit-admin",
-      cwd: "/var/www/nextsuit",
-      script: "pnpm",
-      args: "--filter @nextsuit/admin-web preview",
-      env: {
-        NODE_ENV: "production"
-      }
-    },
-    {
       name: "nextsuit-marketing",
-      cwd: "/var/www/nextsuit",
+      cwd: "/www/wwwroot/studio.tangyikai.top/NextSuit",
       script: "pnpm",
       args: "--filter @nextsuit/marketing-web start",
       env: {
@@ -29,7 +20,7 @@ module.exports = {
     },
     {
       name: "nextsuit-blog",
-      cwd: "/var/www/nextsuit",
+      cwd: "/www/wwwroot/studio.tangyikai.top/NextSuit",
       script: "pnpm",
       args: "--filter @nextsuit/blog-web start",
       env: {
