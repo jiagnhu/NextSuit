@@ -44,9 +44,9 @@ sudo npm i -g pnpm pm2
 ## 3. 代码部署到服务器
 
 ```bash
-cd /var/www
-git clone <你的仓库地址> nextsuit
-cd nextsuit
+cd /www/wwwroot/studio.tangyikai.top
+git clone <你的仓库地址> NextSuit
+cd NextSuit
 nvm use 20 || true
 pnpm install --frozen-lockfile
 ```
@@ -150,6 +150,10 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+如果你使用宝塔默认站点模板，请关闭或注释这行，避免与本项目路由规则冲突：
+
+`include /www/server/panel/vhost/rewrite/html_studio.tangyikai.top.conf;`
+
 确保 `admin-web` 已执行过 `build`，且存在目录：`/www/wwwroot/studio.tangyikai.top/NextSuit/apps/admin-web/dist`。
 
 再配置 SSL（推荐 Certbot）：
@@ -174,3 +178,22 @@ sudo certbot --nginx -d studio.tangyikai.top
 2. 文章封面图不显示：检查 Nginx 是否代理了 `/nextsuit/uploads/`。  
 3. 刷新 Admin 子页面 404：检查 Nginx 中 `/nextsuit/admin/` 是否为静态目录映射，并且 `apps/admin-web/dist/index.html` 存在。  
 4. Next 资源 404：确认 `NEXT_PUBLIC_BASE_PATH` 和 `VITE_APP_BASE_PATH` 已设置并重新 build。
+
+## 11. 日常发布与重启（推荐）
+
+根 `package.json` 已提供两个命令，后续不用手敲一长串：
+
+```bash
+cd /www/wwwroot/studio.tangyikai.top/NextSuit
+
+# 有代码更新时：构建四个项目并重启 PM2（api/marketing/blog）
+pnpm run deploy:build
+
+# 仅重启服务（不重新构建）
+pnpm run deploy:restart
+```
+
+说明：
+
+1. `admin-web` 不走 PM2，但会在 `deploy:build` 里重新构建静态文件，Nginx 自动读取新产物。  
+2. 只有改了环境变量（`.env` / `.env.local`）时，才需要重新构建对应项目。  
