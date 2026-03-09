@@ -45,9 +45,10 @@ pnpm install
 pnpm dev:admin
 ```
 
-Default backend: `http://localhost:4000/api/v1`
+Default backend: `http://localhost:18640/api/v1`
 
 Env keys:
 
 - `VITE_API_BASE_URL`
 - `VITE_ORG_SLUG`
+- `VITE_APP_BASE_PATH` (optional, e.g. `/nextsuit/admin`)

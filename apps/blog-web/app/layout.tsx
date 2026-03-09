@@ -6,6 +6,7 @@ import { LocaleSwitch } from "@/components/locale-switch";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { BlogI18nProvider } from "@/i18n/provider";
 import { getRequestLocale, tServer } from "@/i18n/server";
+import { env } from "@/lib/env";
 import { siteDescription, siteName, siteUrl } from "@/lib/seo";
 
 import "./globals.css";
@@ -71,7 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
             <nav className="site-nav">
               <Link href="/">{t("layout.articles")}</Link>
-              <a href="http://localhost:3001/content/articles" target="_blank" rel="noreferrer">
+              <a href={env.adminUrl} target="_blank" rel="noreferrer">
                 {t("layout.openCms")}
               </a>
               <LocaleSwitch />

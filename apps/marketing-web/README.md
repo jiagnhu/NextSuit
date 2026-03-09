@@ -31,4 +31,11 @@ pnpm install
 pnpm --filter @nextsuit/marketing-web dev
 ```
 
-Default URL: `http://localhost:3002`
+Default URL: `http://localhost:18632`
+
+## Env Keys
+
+- `NEXT_PUBLIC_API_BASE_URL`
+- `NEXT_PUBLIC_ORG_SLUG`
+- `NEXT_PUBLIC_BLOG_URL`
+- `NEXT_PUBLIC_BASE_PATH` (optional, e.g. `/nextsuit`)

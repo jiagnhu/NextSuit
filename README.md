@@ -21,6 +21,8 @@ Monorepo for an Upwork-ready portfolio stack:
 ## Deployment Guide
 
 - Chinese deployment guide: `docs/deployment-zh.md`
+- Nginx template for single-subdomain routing: `deploy/nginx/studio.tangyikai.top.conf`
+- PM2 process template: `deploy/pm2/ecosystem.config.cjs`
 
 ## Quick Start (API)
 
@@ -61,9 +63,9 @@ pnpm --filter @nextsuit/api prisma:seed
 pnpm dev:api
 ```
 
-- API root: `http://localhost:4000`
-- Health: `http://localhost:4000/api/v1/health`
-- Swagger: `http://localhost:4000/docs`
+- API root: `http://localhost:18640`
+- Health: `http://localhost:18640/api/v1/health`
+- Swagger: `http://localhost:18640/docs`
 
 ## Run Admin Web
 
@@ -80,7 +82,7 @@ nvm use 20
 pnpm dev:admin
 ```
 
-- Admin URL: `http://localhost:3001`
+- Admin URL: `http://localhost:18631`
 - Login: `admin@nextsuit.dev` / `Admin123!`
 
 ## Run Marketing Web
@@ -98,7 +100,7 @@ nvm use 20
 pnpm dev:marketing
 ```
 
-- Marketing URL: `http://localhost:3002`
+- Marketing URL: `http://localhost:18632`
 
 ## Run Blog Web
 
@@ -115,7 +117,7 @@ nvm use 20
 pnpm dev:blog
 ```
 
-- Blog URL: `http://localhost:3003`
+- Blog URL: `http://localhost:18633`
 
 ## DB Troubleshooting
 
@@ -147,7 +149,7 @@ pnpm run smoke:api
 Optional env overrides:
 
 ```bash
-SMOKE_API_BASE_URL=http://localhost:4000/api/v1 \
+SMOKE_API_BASE_URL=http://localhost:18640/api/v1 \
 SMOKE_ORG_SLUG=nextsuit-demo \
 SMOKE_ADMIN_EMAIL=admin@nextsuit.dev \
 SMOKE_ADMIN_PASSWORD=Admin123! \

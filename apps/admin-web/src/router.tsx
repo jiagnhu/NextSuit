@@ -3,6 +3,7 @@ import { Suspense, lazy, type ReactNode } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
 import { ProtectedLayout } from "@/layouts/protected-layout";
+import { env } from "@/lib/env";
 
 const LoginPage = lazy(() =>
   import("@/pages/login-page").then((module) => ({ default: module.LoginPage }))
@@ -44,55 +45,60 @@ const withFallback = (element: ReactNode) => (
   </Suspense>
 );
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/login",
+      element: withFallback(<LoginPage />)
+    },
+    {
+      path: "/",
+      element: <ProtectedLayout />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to="/dashboard" replace />
+        },
+        {
+          path: "dashboard",
+          element: withFallback(<DashboardPage />)
+        },
+        {
+          path: "leads",
+          element: withFallback(<LeadsPage />)
+        },
+        {
+          path: "contacts",
+          element: withFallback(<ContactsPage />)
+        },
+        {
+          path: "subscribers",
+          element: withFallback(<SubscribersPage />)
+        },
+        {
+          path: "content/articles",
+          element: withFallback(<ArticlesPage />)
+        },
+        {
+          path: "content/articles/new",
+          element: withFallback(<NewArticlePage />)
+        },
+        {
+          path: "content/articles/:id/edit",
+          element: withFallback(<EditArticlePage />)
+        },
+        {
+          path: "about",
+          element: withFallback(<AboutPage />)
+        }
+      ]
+    },
+    {
+      path: "*",
+      element: <Navigate to="/dashboard" replace />
+    }
+  ],
   {
-    path: "/login",
-    element: withFallback(<LoginPage />)
-  },
-  {
-    path: "/",
-    element: <ProtectedLayout />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="/dashboard" replace />
-      },
-      {
-        path: "dashboard",
-        element: withFallback(<DashboardPage />)
-      },
-      {
-        path: "leads",
-        element: withFallback(<LeadsPage />)
-      },
-      {
-        path: "contacts",
-        element: withFallback(<ContactsPage />)
-      },
-      {
-        path: "subscribers",
-        element: withFallback(<SubscribersPage />)
-      },
-      {
-        path: "content/articles",
-        element: withFallback(<ArticlesPage />)
-      },
-      {
-        path: "content/articles/new",
-        element: withFallback(<NewArticlePage />)
-      },
-      {
-        path: "content/articles/:id/edit",
-        element: withFallback(<EditArticlePage />)
-      },
-      {
-        path: "about",
-        element: withFallback(<AboutPage />)
-      }
-    ]
-  },
-  {
-    path: "*",
-    element: <Navigate to="/dashboard" replace />
+    basename: env.appBasePath === "/" ? undefined : env.appBasePath
   }
-]);
+);

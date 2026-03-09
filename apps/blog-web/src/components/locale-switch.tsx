@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { localeOptions, type Locale } from "@/i18n/messages";
 import { useBlogI18n } from "@/i18n/provider";
+import { env } from "@/lib/env";
 
 export const LocaleSwitch = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ export const LocaleSwitch = () => {
     setIsPending(true);
 
     try {
-      await fetch("/api/locale", {
+      await fetch(env.withBasePath("/api/locale"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

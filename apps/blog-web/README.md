@@ -34,10 +34,12 @@ nvm use 20
 pnpm dev:blog
 ```
 
-- Blog URL: `http://localhost:3003`
+- Blog URL: `http://localhost:18633`
 
 ## Env Keys
 
 - `NEXT_PUBLIC_SITE_URL`
 - `NEXT_PUBLIC_API_BASE_URL`
 - `NEXT_PUBLIC_ORG_SLUG`
+- `NEXT_PUBLIC_ADMIN_URL` (optional, CMS jump link)
+- `NEXT_PUBLIC_BASE_PATH` (optional, e.g. `/nextsuit/blog`)

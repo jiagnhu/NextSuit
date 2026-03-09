@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const API_BASE_URL = process.env.SMOKE_API_BASE_URL ?? "http://localhost:4000/api/v1";
+const API_BASE_URL = process.env.SMOKE_API_BASE_URL ?? "http://localhost:18640/api/v1";
 const ORG_SLUG = process.env.SMOKE_ORG_SLUG ?? "nextsuit-demo";
 const ADMIN_EMAIL = process.env.SMOKE_ADMIN_EMAIL ?? "admin@nextsuit.dev";
 const ADMIN_PASSWORD = process.env.SMOKE_ADMIN_PASSWORD ?? "Admin123!";

@@ -1,5 +1,6 @@
 import { ContactForm } from "@/components/forms/contact-form";
 import { getRequestLocale, tServer } from "@/i18n/server";
+import { env } from "@/lib/env";
 
 export default async function ContactPage() {
   const locale = await getRequestLocale();
@@ -16,7 +17,7 @@ export default async function ContactPage() {
       <section className="dual-column">
         <article className="panel">
           <h2>{t("contact.formTitle")}</h2>
-          <ContactForm sourcePage="/contact" />
+          <ContactForm sourcePage={env.withBasePath("/contact")} />
         </article>
 
         <article className="panel">

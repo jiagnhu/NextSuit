@@ -70,7 +70,7 @@ export default async function HomePage() {
         <article className="panel">
           <h2>{t("home.newsletterTitle")}</h2>
           <p>{t("home.newsletterDesc")}</p>
-          <NewsletterForm sourcePage="/" />
+          <NewsletterForm sourcePage={env.withBasePath("/")} />
         </article>
       </section>
 

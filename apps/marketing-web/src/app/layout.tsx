@@ -31,8 +31,8 @@ export default async function RootLayout({
               </Link>
               <nav>
                 <Link href="/">{t("nav.home")}</Link>
-                <a href="/#pricing">{t("nav.pricing")}</a>
-                <a href="/#insights">{t("nav.insights")}</a>
+                <Link href="/#pricing">{t("nav.pricing")}</Link>
+                <Link href="/#insights">{t("nav.insights")}</Link>
                 <Link href="/contact">{t("nav.contact")}</Link>
                 <LocaleSwitch />
               </nav>
