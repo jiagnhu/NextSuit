@@ -1,0 +1,87 @@
+<svg width="1400" height="620" viewBox="0 0 1400 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flowBg" x1="0" y1="0" x2="1400" y2="620" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6FAFF" />
+      <stop offset="1" stop-color="#F4FFF7" />
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L0 6L9 3L0 0Z" fill="#607A99" />
+    </marker>
+    <style>
+      .title { font: 700 28px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #16324F; }
+      .subtitle { font: 500 16px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #44617E; }
+      .node-title { font: 700 17px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #17324F; }
+      .node-text { font: 500 13px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #304B66; }
+    </style>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="1399" height="619" rx="24" fill="url(#flowBg)" stroke="#D9E6F4" />
+  <text x="52" y="56" class="title">NextSuit Delivery Workflow</text>
+  <text x="52" y="85" class="subtitle">Inbound Traffic -> Lead Capture -> Content Operations -> Admin Execution -> Reporting</text>
+
+  <rect x="52" y="132" width="222" height="126" rx="16" fill="#FFFFFF" stroke="#CEE0F2" />
+  <text x="74" y="168" class="node-title">1. Traffic Entry</text>
+  <text x="74" y="194" class="node-text">Marketing campaigns</text>
+  <text x="74" y="214" class="node-text">SEO blog visits</text>
+  <text x="74" y="234" class="node-text">Direct referral traffic</text>
+
+  <rect x="328" y="132" width="222" height="126" rx="16" fill="#FFFFFF" stroke="#CEE0F2" />
+  <text x="350" y="168" class="node-title">2. Lead Conversion</text>
+  <text x="350" y="194" class="node-text">Contact form submit</text>
+  <text x="350" y="214" class="node-text">Lead form submit</text>
+  <text x="350" y="234" class="node-text">Newsletter subscribe</text>
+
+  <rect x="604" y="132" width="222" height="126" rx="16" fill="#FFFFFF" stroke="#CEE0F2" />
+  <text x="626" y="168" class="node-title">3. API Processing</text>
+  <text x="626" y="194" class="node-text">Validation + sanitize</text>
+  <text x="626" y="214" class="node-text">Org-scoped persistence</text>
+  <text x="626" y="234" class="node-text">Analytics aggregation</text>
+
+  <rect x="880" y="132" width="222" height="126" rx="16" fill="#FFFFFF" stroke="#CEE0F2" />
+  <text x="902" y="168" class="node-title">4. Admin Follow-up</text>
+  <text x="902" y="194" class="node-text">Status updates</text>
+  <text x="902" y="214" class="node-text">Activity notes</text>
+  <text x="902" y="234" class="node-text">Content publishing</text>
+
+  <rect x="1156" y="132" width="192" height="126" rx="16" fill="#FFFFFF" stroke="#CEE0F2" />
+  <text x="1178" y="168" class="node-title">5. Insights</text>
+  <text x="1178" y="194" class="node-text">Dashboard KPIs</text>
+  <text x="1178" y="214" class="node-text">Content performance</text>
+  <text x="1178" y="234" class="node-text">Revenue signals</text>
+
+  <line x1="274" y1="195" x2="328" y2="195" stroke="#607A99" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="550" y1="195" x2="604" y2="195" stroke="#607A99" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="826" y1="195" x2="880" y2="195" stroke="#607A99" stroke-width="2.5" marker-end="url(#arrow)" />
+  <line x1="1102" y1="195" x2="1156" y2="195" stroke="#607A99" stroke-width="2.5" marker-end="url(#arrow)" />
+
+  <rect x="52" y="318" width="1296" height="246" rx="18" fill="#FFFFFF" stroke="#DBE9F8" />
+  <text x="76" y="360" class="node-title">Execution Ownership by Project</text>
+
+  <rect x="80" y="382" width="292" height="150" rx="14" fill="#F9FBFF" stroke="#D6E4F2" />
+  <text x="102" y="416" class="node-title">Marketing Web (Next.js)</text>
+  <text x="102" y="441" class="node-text">- Builds conversion pages</text>
+  <text x="102" y="461" class="node-text">- Captures leads and contacts</text>
+  <text x="102" y="481" class="node-text">- Sends API requests to backend</text>
+
+  <rect x="404" y="382" width="292" height="150" rx="14" fill="#F9FBFF" stroke="#D6E4F2" />
+  <text x="426" y="416" class="node-title">Blog Web (Next.js)</text>
+  <text x="426" y="441" class="node-text">- Renders article catalog</text>
+  <text x="426" y="461" class="node-text">- Handles topic/tag filtering</text>
+  <text x="426" y="481" class="node-text">- Sends page-view events</text>
+
+  <rect x="728" y="382" width="292" height="150" rx="14" fill="#F9FBFF" stroke="#D6E4F2" />
+  <text x="750" y="416" class="node-title">Admin Web (React)</text>
+  <text x="750" y="441" class="node-text">- Reviews leads and contacts</text>
+  <text x="750" y="461" class="node-text">- Updates status and notes</text>
+  <text x="750" y="481" class="node-text">- Performs article CRUD</text>
+
+  <rect x="1052" y="382" width="268" height="150" rx="14" fill="#F9FBFF" stroke="#D6E4F2" />
+  <text x="1074" y="416" class="node-title">Core API + Database</text>
+  <text x="1074" y="441" class="node-text">- Unified auth + org context</text>
+  <text x="1074" y="461" class="node-text">- Shared business entities</text>
+  <text x="1074" y="481" class="node-text">- Source of truth metrics</text>
+
+  <line x1="372" y1="456" x2="404" y2="456" stroke="#7A94B1" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="696" y1="456" x2="728" y2="456" stroke="#7A94B1" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="1020" y1="456" x2="1052" y2="456" stroke="#7A94B1" stroke-width="2" marker-end="url(#arrow)" />
+</svg>

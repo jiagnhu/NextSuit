@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avatarBg" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F3A6D" />
+      <stop offset="1" stop-color="#1C8B5E" />
+    </linearGradient>
+    <radialGradient id="avatarGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 180) rotate(90) scale(220)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.5" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#avatarBg)" />
+  <circle cx="256" cy="256" r="220" fill="url(#avatarGlow)" />
+  <circle cx="256" cy="210" r="92" fill="#DCEBFF" fill-opacity="0.92" />
+  <path
+    d="M102 410C122 332 188 284 256 284C324 284 390 332 410 410"
+    fill="#DCEBFF"
+    fill-opacity="0.92"
+  />
+  <text
+    x="256"
+    y="452"
+    text-anchor="middle"
+    font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+    font-size="52"
+    font-weight="700"
+    fill="#FFFFFF"
+    letter-spacing="2"
+  >
+    NEXTSUIT
+  </text>
+</svg>

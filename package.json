@@ -1,0 +1,22 @@
+{
+  "name": "nextsuit-growth-suite",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev:api": "pnpm --filter @nextsuit/api dev",
+    "dev:admin": "pnpm --filter @nextsuit/admin-web dev",
+    "dev:marketing": "pnpm --filter @nextsuit/marketing-web dev",
+    "dev:blog": "pnpm --filter @nextsuit/blog-web dev",
+    "build:api": "pnpm --filter @nextsuit/api build",
+    "build:admin": "pnpm --filter @nextsuit/admin-web build",
+    "build:marketing": "pnpm --filter @nextsuit/marketing-web build",
+    "build:blog": "pnpm --filter @nextsuit/blog-web build",
+    "lint:api": "pnpm --filter @nextsuit/api lint",
+    "typecheck:api": "pnpm --filter @nextsuit/api typecheck",
+    "typecheck:admin": "pnpm --filter @nextsuit/admin-web typecheck",
+    "typecheck:marketing": "pnpm --filter @nextsuit/marketing-web typecheck",
+    "typecheck:blog": "pnpm --filter @nextsuit/blog-web typecheck",
+    "smoke:api": "node scripts/smoke-api.mjs",
+    "ci:check": "pnpm --filter @nextsuit/api prisma:generate && pnpm typecheck:api && pnpm typecheck:admin && pnpm typecheck:marketing && pnpm typecheck:blog && pnpm build:api && pnpm build:admin && pnpm build:marketing && pnpm build:blog"
+  }
+}

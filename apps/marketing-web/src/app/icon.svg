@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="mktBg" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f97316" />
+      <stop offset="1" stop-color="#7c2d12" />
+    </linearGradient>
+    <linearGradient id="mktLine" x1="16" y1="48" x2="48" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fdba74" />
+      <stop offset="1" stop-color="#ffedd5" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#mktBg)" />
+  <path d="M17 44L28 33L35 38L46 24" fill="none" stroke="url(#mktLine)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" />
+  <path d="M41.5 24H46V28.5" fill="none" stroke="#ffedd5" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.2" />
+</svg>

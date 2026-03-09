@@ -1,0 +1,267 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  active
+  disabled
+}
+
+enum ArticleStatus {
+  draft
+  published
+  archived
+}
+
+enum LeadStatus {
+  new
+  qualified
+  won
+  lost
+}
+
+enum ContactStatus {
+  new
+  in_progress
+  resolved
+  spam
+}
+
+enum SubscriberStatus {
+  active
+  unsubscribed
+}
+
+model Organization {
+  id                  String               @id @default(uuid())
+  name                String
+  slug                String               @unique
+  timezone            String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  users               User[]
+  categories          Category[]
+  tags                Tag[]
+  articles            Article[]
+  contacts            Contact[]
+  leads               Lead[]
+  subscribers         Subscriber[]
+  settings            Setting[]
+  pageViews           PageView[]
+  dashboardStatsDaily DashboardStatsDaily[]
+}
+
+model User {
+  id            String         @id @default(uuid())
+  orgId         String
+  email         String         @unique
+  passwordHash  String
+  name          String
+  avatarUrl     String?
+  status        UserStatus     @default(active)
+  lastLoginAt   DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  organization  Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  authoredPosts Article[]
+  roles         UserRole[]
+  ownedLeads    Lead[]         @relation("LeadOwner")
+  leadActivities LeadActivity[]
+
+  @@index([orgId])
+}
+
+model Role {
+  id        Int        @id @default(autoincrement())
+  code      String     @unique
+  name      String
+  createdAt DateTime   @default(now())
+  users     UserRole[]
+}
+
+model UserRole {
+  userId    String
+  roleId    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  orgId        String
+  name         String
+  slug         String
+  description  String?
+  createdAt    DateTime      @default(now())
+  organization Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  articles     Article[]
+
+  @@unique([orgId, slug])
+}
+
+model Tag {
+  id           String        @id @default(uuid())
+  orgId        String
+  name         String
+  slug         String
+  createdAt    DateTime      @default(now())
+  organization Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  articleTags  ArticleTag[]
+
+  @@unique([orgId, slug])
+}
+
+model Article {
+  id             String         @id @default(uuid())
+  orgId          String
+  title          String
+  slug           String
+  excerpt        String?
+  contentMd      String
+  coverImage     String?
+  status         ArticleStatus  @default(draft)
+  authorId       String
+  categoryId     String?
+  seoTitle       String?
+  seoDescription String?
+  publishedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  organization   Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  author         User           @relation(fields: [authorId], references: [id])
+  category       Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  articleTags    ArticleTag[]
+
+  @@unique([orgId, slug])
+  @@index([status])
+  @@index([publishedAt(sort: Desc)])
+  @@index([categoryId])
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+}
+
+model Contact {
+  id           String        @id @default(uuid())
+  orgId        String
+  name         String
+  email        String
+  company      String?
+  subject      String?
+  message      String
+  sourcePage   String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  status       ContactStatus @default(new)
+  createdAt    DateTime      @default(now())
+  organization Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt(sort: Desc)])
+  @@index([email])
+  @@index([status])
+}
+
+model Lead {
+  id              String       @id @default(uuid())
+  orgId           String
+  name            String
+  email           String
+  company         String?
+  jobTitle        String?
+  budgetRange     String?
+  interest        String?
+  source          String?
+  status          LeadStatus   @default(new)
+  notes           String?
+  ownerUserId     String?
+  lastContactedAt DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  owner           User?        @relation("LeadOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  activities      LeadActivity[]
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([email])
+}
+
+model LeadActivity {
+  id          String   @id @default(uuid())
+  leadId      String
+  actorUserId String
+  actionType  String
+  note        String?
+  createdAt   DateTime @default(now())
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  actorUser   User     @relation(fields: [actorUserId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt(sort: Desc)])
+}
+
+model Subscriber {
+  id           String           @id @default(uuid())
+  orgId        String
+  email        String
+  sourcePage   String?
+  status       SubscriberStatus @default(active)
+  createdAt    DateTime         @default(now())
+  organization Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, email])
+}
+
+model DashboardStatsDaily {
+  id               BigInt       @id @default(autoincrement())
+  orgId            String
+  date             DateTime
+  totalLeads       Int          @default(0)
+  newLeads         Int          @default(0)
+  totalContacts    Int          @default(0)
+  totalSubscribers Int          @default(0)
+  publishedArticles Int         @default(0)
+  organization     Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, date])
+}
+
+model Setting {
+  id           String       @id @default(uuid())
+  orgId        String
+  key          String
+  valueJson    Json
+  isPublic     Boolean      @default(false)
+  updatedAt    DateTime     @updatedAt
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, key])
+}
+
+model PageView {
+  id           BigInt       @id @default(autoincrement())
+  orgId        String
+  path         String
+  referrer     String?
+  utmSource    String?
+  device       String?
+  createdAt    DateTime     @default(now())
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([path])
+  @@index([createdAt(sort: Desc)])
+}
