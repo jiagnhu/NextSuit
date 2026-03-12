@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "dev": "pnpm --parallel --filter @nextsuit/api --filter @nextsuit/admin-web --filter @nextsuit/marketing-web --filter @nextsuit/blog-web dev",
     "dev:api": "pnpm --filter @nextsuit/api dev",
     "dev:admin": "pnpm --filter @nextsuit/admin-web dev",
     "dev:marketing": "pnpm --filter @nextsuit/marketing-web dev",

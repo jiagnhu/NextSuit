@@ -10,6 +10,7 @@ import { Avatar, Card, Col, Divider, Image, List, Row, Space, Tag, Typography } 
 import { useMemo, type ReactNode } from "react";
 
 import { useI18n } from "@/i18n/i18n-provider";
+import { env, withAppBasePath } from "@/lib/env";
 
 type ProjectCard = {
   key: string;
@@ -235,6 +236,34 @@ const iconByProjectKey: Record<string, ReactNode> = {
 export const AboutPage = () => {
   const { locale } = useI18n();
   const content = contentByLocale[locale];
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+
+  const suiteBasePath = useMemo(() => {
+    if (env.appBasePath === "/") {
+      return "";
+    }
+
+    return env.appBasePath.endsWith("/admin")
+      ? env.appBasePath.slice(0, -"/admin".length)
+      : env.appBasePath;
+  }, []);
+
+  const projectAccessLinks = useMemo(() => {
+    const buildUrl = (suffix: string) => {
+      const normalizedSuffix = suffix ? (suffix.startsWith("/") ? suffix : `/${suffix}`) : "";
+      const pathname = `${suiteBasePath}${normalizedSuffix}` || "/";
+      return origin ? `${origin}${pathname}` : pathname;
+    };
+
+    const apiDocs = `${env.apiBaseUrl.replace(/\/+$/, "")}/docs`;
+
+    return {
+      api: apiDocs,
+      marketing: buildUrl(""),
+      admin: buildUrl("/admin"),
+      blog: buildUrl("/blog")
+    } as const;
+  }, [origin, suiteBasePath]);
 
   const contactItems = useMemo(
     () => [
@@ -325,7 +354,7 @@ export const AboutPage = () => {
       <Card className="about-hero-card">
         <Row gutter={[24, 24]} align="middle">
           <Col xs={24} md={6} lg={5} style={{ textAlign: "center" }}>
-            <Avatar src="/about-avatar.svg" size={120} />
+            <Avatar src={withAppBasePath("/about-avatar.svg")} size={120} />
           </Col>
           <Col xs={24} md={18} lg={19}>
             <Space direction="vertical" size={8} style={{ width: "100%" }}>
@@ -390,6 +419,27 @@ export const AboutPage = () => {
                     dataSource={project.highlights}
                     renderItem={(item) => <List.Item>{item}</List.Item>}
                   />
+                  {project.key in projectAccessLinks ? (
+                    <div>
+                      <Typography.Text strong>
+                        {project.key === "api"
+                          ? locale === "zh-CN"
+                            ? "文档地址："
+                            : "Docs URL: "
+                          : locale === "zh-CN"
+                            ? "访问地址："
+                            : "Live URL: "}
+                      </Typography.Text>
+                      <Typography.Link
+                        href={projectAccessLinks[project.key as keyof typeof projectAccessLinks]}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {projectAccessLinks[project.key as keyof typeof projectAccessLinks]}
+                      </Typography.Link>
+                    </div>
+                  ) : null}
                   <Typography.Text strong>{project.businessValue}</Typography.Text>
                 </Space>
               </Card>
@@ -401,7 +451,7 @@ export const AboutPage = () => {
       <Card title={content.sectionFlow}>
         <Typography.Paragraph type="secondary">{content.flowCaption}</Typography.Paragraph>
         <Image
-          src="/about-flow.svg"
+          src={withAppBasePath("/about-flow.svg")}
           alt="project workflow diagram"
           preview={false}
           style={{ width: "100%"}}
@@ -411,7 +461,7 @@ export const AboutPage = () => {
       <Card title={content.sectionDataFlow}>
         <Typography.Paragraph type="secondary">{content.dataFlowCaption}</Typography.Paragraph>
         <Image
-          src="/about-dataflow.svg"
+          src={withAppBasePath("/about-dataflow.svg")}
           alt="project data flow diagram"
           preview={false}
           style={{ width: "100%" }}

@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { env, resolveUploadedAssetUrl } from "@/lib/env";
 
 export const siteName = "NextSuit Insights";
 
@@ -9,10 +9,15 @@ export const siteUrl = env.siteUrl.replace(/\/$/, "");
 
 export const toAbsoluteUrl = (pathOrUrl: string) => {
   if (/^https?:\/\//i.test(pathOrUrl)) {
-    return pathOrUrl;
+    return resolveUploadedAssetUrl(pathOrUrl);
   }
 
   const normalizedPath = pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`;
+
+  if (normalizedPath.startsWith("/uploads/")) {
+    return resolveUploadedAssetUrl(normalizedPath);
+  }
+
   return `${siteUrl}${normalizedPath}`;
 };
 

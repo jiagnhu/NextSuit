@@ -23,6 +23,7 @@ import { ARTICLE_STATUS_OPTIONS, articlesApi } from "@/features/articles/api";
 import type { ArticleItem, ArticleStatus } from "@/features/articles/types";
 import { useListPage } from "@/hooks/use-list-page";
 import { useI18n } from "@/i18n/i18n-provider";
+import { resolveUploadedAssetUrl } from "@/lib/env";
 
 const statusColorMap: Record<ArticleStatus, string> = {
   draft: "default",
@@ -331,7 +332,7 @@ export const ArticlesPage = () => {
                   {t("editor.coverImage")}
                 </Typography.Text>
                 <img
-                  src={activeArticle.coverImage}
+                  src={resolveUploadedAssetUrl(activeArticle.coverImage)}
                   alt={activeArticle.title}
                   style={{ width: "100%", maxHeight: 300, objectFit: "cover", borderRadius: 8 }}
                 />

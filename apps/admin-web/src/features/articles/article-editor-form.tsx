@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 
 import { useI18n } from "@/i18n/i18n-provider";
+import { resolveUploadedAssetUrl } from "@/lib/env";
 
 import { articlesApi, ARTICLE_STATUS_OPTIONS } from "./api";
 import { MarkdownRichEditor } from "./markdown-rich-editor";
@@ -114,7 +115,7 @@ export const ArticleEditorForm = ({
     try {
       setUploadingImage(true);
       const uploaded = await articlesApi.uploadImage(file);
-      form.setFieldValue("coverImage", uploaded.url);
+      form.setFieldValue("coverImage", resolveUploadedAssetUrl(uploaded.url));
       message.success(t("editor.uploadSuccess"));
       options.onSuccess?.(uploaded);
     } catch (error) {
@@ -240,7 +241,7 @@ export const ArticleEditorForm = ({
             {coverImage ? (
               <div>
                 <img
-                  src={coverImage}
+                  src={resolveUploadedAssetUrl(coverImage)}
                   alt="cover preview"
                   style={{
                     width: 260,

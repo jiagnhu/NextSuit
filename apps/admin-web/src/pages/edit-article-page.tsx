@@ -6,13 +6,14 @@ import { ArticleEditorForm, clearArticleDraft } from "@/features/articles/articl
 import { articlesApi } from "@/features/articles/api";
 import type { ArticleFormValues } from "@/features/articles/types";
 import { useI18n } from "@/i18n/i18n-provider";
+import { resolveUploadedAssetUrl } from "@/lib/env";
 
 const toPayload = (values: ArticleFormValues) => ({
   title: values.title,
   slug: values.slug,
   excerpt: values.excerpt || undefined,
   contentMd: values.contentMd,
-  coverImage: values.coverImage || undefined,
+  coverImage: values.coverImage ? resolveUploadedAssetUrl(values.coverImage) : undefined,
   status: values.status,
   categoryId: values.categoryId || undefined,
   tagIds: values.tagIds?.length ? values.tagIds : undefined,
@@ -112,7 +113,9 @@ export const EditArticlePage = () => {
           slug: articleQuery.data.slug,
           excerpt: articleQuery.data.excerpt ?? undefined,
           contentMd: articleQuery.data.contentMd,
-          coverImage: articleQuery.data.coverImage ?? undefined,
+          coverImage: articleQuery.data.coverImage
+            ? resolveUploadedAssetUrl(articleQuery.data.coverImage)
+            : undefined,
           status: articleQuery.data.status,
           categoryId: articleQuery.data.categoryId ?? undefined,
           tagIds: articleQuery.data.articleTags.map((item) => item.tag.id),

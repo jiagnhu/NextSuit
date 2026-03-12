@@ -12,7 +12,8 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("7d"),
   COOKIE_NAME: z.string().default("nextsuit_session"),
   CORS_ORIGIN: z.string().default("http://localhost:18631"),
-  PUBLIC_BASE_URL: z.string().url().default("http://localhost:18640"),
+  PUBLIC_BASE_URL: z.string().url().optional(),
+  PUBLIC_BASE_PATH: z.string().default(""),
   DEFAULT_ORG_SLUG: z.string().default("nextsuit-demo"),
   ADMIN_EMAIL: z.string().email().default("admin@nextsuit.dev"),
   ADMIN_PASSWORD: z.string().min(8).default("Admin123!")

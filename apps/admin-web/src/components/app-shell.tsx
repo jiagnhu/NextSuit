@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { authApi } from "@/features/auth/api";
 import { useI18n } from "@/i18n/i18n-provider";
+import { withAppBasePath } from "@/lib/env";
 import { useUiStore } from "@/stores/ui-store";
 
 const { Header, Sider, Content } = Layout;
@@ -152,7 +153,7 @@ export const AppShell = ({ children }: PropsWithChildren) => {
         >
           {collapsed ? (
             <img
-              src="/favicon.svg"
+              src={withAppBasePath("/favicon.svg")}
               alt="SuiteOps"
               width={28}
               height={28}

@@ -1,22 +1,10 @@
 import type { Express } from "express";
-import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import { env } from "./env.js";
+import { openApiSpec } from "./openapi.js";
 
 export const setupSwagger = (app: Express) => {
-  const spec = swaggerJsdoc({
-    definition: {
-      openapi: "3.0.0",
-      info: {
-        title: "NextSuit Core API",
-        version: "0.1.0",
-        description: "Unified backend for admin, marketing and blog apps"
-      },
-      servers: [{ url: `http://localhost:${env.PORT}${env.API_PREFIX}` }]
-    },
-    apis: []
-  });
-
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(spec));
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
+  app.use(`${env.API_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(openApiSpec));
 };

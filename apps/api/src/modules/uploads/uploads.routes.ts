@@ -5,6 +5,7 @@ import path from "path";
 import multer from "multer";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
+import type { Request } from "express";
 
 import { env } from "../../config/env.js";
 import { requireAuth } from "../../middlewares/auth.js";
@@ -23,6 +24,38 @@ const mimeToExt: Record<string, string> = {
   "image/png": ".png",
   "image/webp": ".webp",
   "image/gif": ".gif"
+};
+
+const normalizeBasePath = (value: string | undefined) => {
+  if (!value) {
+    return "";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "/") {
+    return "";
+  }
+
+  const prefixed = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return prefixed.endsWith("/") ? prefixed.slice(0, -1) : prefixed;
+};
+
+const trimTrailingSlash = (value: string) => value.replace(/\/+$/, "");
+
+const resolvePublicBase = (req: Request) => {
+  const basePath = normalizeBasePath(env.PUBLIC_BASE_PATH);
+
+  if (env.PUBLIC_BASE_URL) {
+    const configured = trimTrailingSlash(env.PUBLIC_BASE_URL);
+    return basePath && !configured.endsWith(basePath) ? `${configured}${basePath}` : configured;
+  }
+
+  const forwardedProto = req.header("x-forwarded-proto")?.split(",")[0]?.trim();
+  const forwardedHost = req.header("x-forwarded-host")?.split(",")[0]?.trim();
+  const protocol = forwardedProto || req.protocol || "http";
+  const host = forwardedHost || req.get("host") || `localhost:${env.PORT}`;
+
+  return `${protocol}://${host}${basePath}`;
 };
 
 const upload = multer({
@@ -59,7 +92,7 @@ uploadsRouter.post(
       throw new AppError("File is required", 400, "FILE_REQUIRED");
     }
 
-    const imageUrl = `${env.PUBLIC_BASE_URL}/uploads/images/${req.file.filename}`;
+    const imageUrl = `${resolvePublicBase(req)}/uploads/images/${req.file.filename}`;
 
     res.status(StatusCodes.CREATED).json(
       ok({

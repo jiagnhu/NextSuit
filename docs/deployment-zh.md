@@ -64,7 +64,8 @@ JWT_SECRET=<请使用高强度随机字符串>
 JWT_EXPIRES_IN=7d
 COOKIE_NAME=nextsuit_session
 CORS_ORIGIN=https://studio.tangyikai.top
-PUBLIC_BASE_URL=https://studio.tangyikai.top/nextsuit
+PUBLIC_BASE_URL=https://studio.tangyikai.top
+PUBLIC_BASE_PATH=/nextsuit
 DEFAULT_ORG_SLUG=nextsuit-demo
 ADMIN_EMAIL=admin@nextsuit.dev
 ADMIN_PASSWORD=<你的生产密码>
@@ -175,7 +176,7 @@ sudo certbot --nginx -d studio.tangyikai.top
 ## 10. 常见问题
 
 1. Admin 登录 401：检查 API `CORS_ORIGIN` 是否为 `https://studio.tangyikai.top`。  
-2. 文章封面图不显示：检查 Nginx 是否代理了 `/nextsuit/uploads/`。  
+2. 文章封面图不显示：检查 Nginx 是否代理了 `/nextsuit/uploads/`，并确认 API 环境变量 `PUBLIC_BASE_URL`、`PUBLIC_BASE_PATH` 已设置后重启 API。  
 3. 刷新 Admin 子页面 404：检查 Nginx 中 `/nextsuit/admin/` 是否为静态目录映射，并且 `apps/admin-web/dist/index.html` 存在。  
 4. Next 资源 404：确认 `NEXT_PUBLIC_BASE_PATH` 和 `VITE_APP_BASE_PATH` 已设置并重新 build。
 
