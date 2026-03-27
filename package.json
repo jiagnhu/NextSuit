@@ -19,7 +19,8 @@
     "typecheck:blog": "pnpm --filter @nextsuit/blog-web typecheck",
     "smoke:api": "node scripts/smoke-api.mjs",
     "ci:check": "pnpm --filter @nextsuit/api prisma:generate && pnpm typecheck:api && pnpm typecheck:admin && pnpm typecheck:marketing && pnpm typecheck:blog && pnpm build:api && pnpm build:admin && pnpm build:marketing && pnpm build:blog",
-    "deploy:build": "pnpm --filter @nextsuit/api build && pnpm --filter @nextsuit/admin-web build && pnpm --filter @nextsuit/marketing-web build && pnpm --filter @nextsuit/blog-web build && pm2 restart nextsuit-api nextsuit-marketing nextsuit-blog",
+    "deploy:migrate": "pnpm --filter @nextsuit/api exec prisma migrate deploy",
+    "deploy:build": "pnpm --filter @nextsuit/api build && pnpm --filter @nextsuit/admin-web build && pnpm --filter @nextsuit/marketing-web build && pnpm --filter @nextsuit/blog-web build && pnpm run deploy:migrate && pm2 restart nextsuit-api nextsuit-marketing nextsuit-blog",
     "deploy:restart": "pm2 restart nextsuit-api nextsuit-marketing nextsuit-blog"
   }
 }
