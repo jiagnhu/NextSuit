@@ -36,7 +36,8 @@ authRouter.post(
     const token = signAccessToken({
       userId: result.id,
       orgId: result.orgId,
-      email: result.email
+      email: result.email,
+      roles: result.roles
     });
 
     res.cookie(env.COOKIE_NAME, token, cookieOptions);

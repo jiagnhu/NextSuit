@@ -6,7 +6,9 @@ import type {
   ArticleListParams,
   ArticleListResult,
   ArticleStatus,
+  CategoryFormPayload,
   CategoryItem,
+  TagFormPayload,
   TagItem,
   UploadedImageResult
 } from "./types";
@@ -90,8 +92,38 @@ export const articlesApi = {
     return response.data;
   },
 
+  async createCategory(payload: CategoryFormPayload) {
+    const response = await apiRequest<CategoryItem>("/categories", {
+      method: "POST",
+      body: payload
+    });
+    return response.data;
+  },
+
+  async removeCategory(id: string) {
+    const response = await apiRequest<{ id: string; deleted: true }>(`/categories/${id}`, {
+      method: "DELETE"
+    });
+    return response.data;
+  },
+
   async listTags() {
     const response = await apiRequest<TagItem[]>("/tags");
+    return response.data;
+  },
+
+  async createTag(payload: TagFormPayload) {
+    const response = await apiRequest<TagItem>("/tags", {
+      method: "POST",
+      body: payload
+    });
+    return response.data;
+  },
+
+  async removeTag(id: string) {
+    const response = await apiRequest<{ id: string; deleted: true }>(`/tags/${id}`, {
+      method: "DELETE"
+    });
     return response.data;
   }
 };

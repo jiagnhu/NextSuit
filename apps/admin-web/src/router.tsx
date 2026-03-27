@@ -29,6 +29,9 @@ const NewArticlePage = lazy(() =>
 const EditArticlePage = lazy(() =>
   import("@/pages/edit-article-page").then((module) => ({ default: module.EditArticlePage }))
 );
+const TaxonomiesPage = lazy(() =>
+  import("@/pages/taxonomies-page").then((module) => ({ default: module.TaxonomiesPage }))
+);
 const AboutPage = lazy(() =>
   import("@/pages/about-page").then((module) => ({ default: module.AboutPage }))
 );
@@ -86,6 +89,10 @@ export const router = createBrowserRouter(
         {
           path: "content/articles/:id/edit",
           element: withFallback(<EditArticlePage />)
+        },
+        {
+          path: "content/taxonomies",
+          element: withFallback(<TaxonomiesPage />)
         },
         {
           path: "about",

@@ -52,8 +52,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const t = (key: string) => tServer(locale, key);
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <BlogI18nProvider initialLocale={locale}>
           <Suspense fallback={null}>
             <PageViewTracker />

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { asyncHandler } from "../../middlewares/async-handler.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { publicFormRateLimit } from "../../middlewares/public-rate-limit.js";
 import { validate } from "../../middlewares/validate.js";
 import { ok } from "../../utils/api-response.js";
@@ -32,6 +32,7 @@ leadsRouter.post(
 leadsRouter.get(
   "/",
   requireAuth,
+  requireAdmin,
   validate(leadListQuerySchema, "query"),
   asyncHandler(async (req, res) => {
     const result = await leadsService.list({ orgId: req.orgId!, ...req.query });
@@ -42,6 +43,7 @@ leadsRouter.get(
 leadsRouter.get(
   "/:id",
   requireAuth,
+  requireAdmin,
   validate(leadIdParamSchema, "params"),
   asyncHandler(async (req, res) => {
     const lead = await leadsService.findById(req.orgId!, req.params.id);
@@ -57,6 +59,7 @@ leadsRouter.get(
 leadsRouter.patch(
   "/:id/status",
   requireAuth,
+  requireAdmin,
   validate(leadIdParamSchema, "params"),
   validate(leadStatusSchema),
   asyncHandler(async (req, res) => {
@@ -79,6 +82,7 @@ leadsRouter.patch(
 leadsRouter.post(
   "/:id/activities",
   requireAuth,
+  requireAdmin,
   validate(leadIdParamSchema, "params"),
   validate(createLeadActivitySchema),
   asyncHandler(async (req, res) => {

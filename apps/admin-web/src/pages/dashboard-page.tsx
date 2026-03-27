@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Row, Space, Statistic, Table, Tag, Typography } from "antd";
 import dayjs from "dayjs";
 
+import { authApi } from "@/features/auth/api";
+import { isAdminUser } from "@/features/auth/permissions";
 import { dashboardApi } from "@/features/dashboard/api";
 import { useI18n } from "@/i18n/i18n-provider";
 
@@ -14,6 +16,14 @@ const statusColorMap = {
 
 export const DashboardPage = () => {
   const { t } = useI18n();
+  const meQuery = useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: authApi.me,
+    staleTime: 5 * 60 * 1000,
+    retry: false
+  });
+  const canViewLeadEmail = isAdminUser(meQuery.data);
+
   const overviewQuery = useQuery({
     queryKey: ["dashboard", "overview"],
     queryFn: dashboardApi.getOverview
@@ -188,7 +198,8 @@ export const DashboardPage = () => {
             },
             {
               title: t("dashboard.email"),
-              dataIndex: "email"
+              dataIndex: "email",
+              render: (value: string) => (canViewLeadEmail ? value : "****")
             },
             {
               title: t("dashboard.company"),

@@ -1,3 +1,6 @@
+管理员：admin@nextsuit.dev / Admin123!
+游客：visitor@nextsuit.dev / Visitor123!
+
 # NextSuit Growth Suite
 
 Monorepo for an Upwork-ready portfolio stack:
@@ -83,7 +86,8 @@ pnpm dev:admin
 ```
 
 - Admin URL: `http://localhost:18631`
-- Login: `admin@nextsuit.dev` / `Admin123!`
+- Admin login: `admin@nextsuit.dev` / `Admin123!` (Administrator)
+- Visitor login: `visitor@nextsuit.dev` / `Visitor123!` (Viewer, read-only)
 
 ## Run Marketing Web
 
@@ -137,6 +141,34 @@ pnpm --filter @nextsuit/api prisma:seed
 
 - Email: `admin@nextsuit.dev`
 - Password: `Admin123!`
+
+## Seeded Visitor Account
+
+- Email: `visitor@nextsuit.dev`
+- Password: `Visitor123!`
+
+Only sync admin/viewer accounts and roles (without reseeding all demo content):
+
+```bash
+pnpm --filter @nextsuit/api rbac:users
+```
+
+## Weekly Digest Email (Resend)
+
+Blog "Weekly Delivery Notes" subscriptions are stored via `POST /api/v1/subscribers`.
+API can send weekly digest emails every Monday (previous week's published articles) through Resend.
+
+Set these in `apps/api/.env`:
+
+```bash
+RESEND_API_KEY="your_resend_api_key"
+RESEND_FROM_EMAIL="onboarding@resend.dev"
+BLOG_BASE_URL="http://localhost:18633"
+WEEKLY_DIGEST_ENABLED="true"
+WEEKLY_DIGEST_SEND_HOUR="9"
+WEEKLY_DIGEST_TIMEZONE="Asia/Shanghai"
+WEEKLY_DIGEST_TEST_EMAIL=""
+```
 
 ## Smoke Test (API Data Flow)
 

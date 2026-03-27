@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { prisma } from "../../lib/prisma.js";
 import { asyncHandler } from "../../middlewares/async-handler.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { validate } from "../../middlewares/validate.js";
 import { ok } from "../../utils/api-response.js";
 import { settingKeyParamSchema, updateSettingSchema } from "./settings.schema.js";
@@ -31,6 +31,7 @@ settingsRouter.get(
 settingsRouter.get(
   "/",
   requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const settings = await prisma.setting.findMany({
       where: {
@@ -48,6 +49,7 @@ settingsRouter.get(
 settingsRouter.patch(
   "/:key",
   requireAuth,
+  requireAdmin,
   validate(settingKeyParamSchema, "params"),
   validate(updateSettingSchema),
   asyncHandler(async (req, res) => {

@@ -213,8 +213,8 @@ const baseOpenApiSpec = {
         properties: {
           title: { type: "string" },
           slug: { type: "string" },
-          excerpt: { type: "string", nullable: true },
-          contentMd: { type: "string" },
+          excerpt: { type: "string", nullable: true, maxLength: 5000 },
+          contentMd: { type: "string", minLength: 20, maxLength: 5000 },
           coverImage: { type: "string", nullable: true },
           status: { type: "string", enum: ["draft", "published", "archived"], nullable: true },
           categoryId: { type: "string", format: "uuid", nullable: true },
@@ -247,18 +247,20 @@ const baseOpenApiSpec = {
       },
       CategoryCreateRequest: {
         type: "object",
-        required: ["name", "slug"],
+        required: ["nameEn", "nameZh", "slug"],
         properties: {
-          name: { type: "string" },
+          nameEn: { type: "string" },
+          nameZh: { type: "string" },
           slug: { type: "string" },
           description: { type: "string", nullable: true }
         }
       },
       TagCreateRequest: {
         type: "object",
-        required: ["name", "slug"],
+        required: ["nameEn", "nameZh", "slug"],
         properties: {
-          name: { type: "string" },
+          nameEn: { type: "string" },
+          nameZh: { type: "string" },
           slug: { type: "string" }
         }
       },
@@ -715,6 +717,17 @@ const baseOpenApiSpec = {
         }
       }
     },
+    "/categories/{id}": {
+      delete: {
+        tags: ["Categories"],
+        summary: "Delete category",
+        security: [{ cookieAuth: [] }, { orgSlugHeader: [] }],
+        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        responses: {
+          200: successResponse("Category deleted")
+        }
+      }
+    },
     "/tags": {
       get: {
         tags: ["Tags"],
@@ -738,6 +751,17 @@ const baseOpenApiSpec = {
         },
         responses: {
           201: successResponse("Tag created")
+        }
+      }
+    },
+    "/tags/{id}": {
+      delete: {
+        tags: ["Tags"],
+        summary: "Delete tag",
+        security: [{ cookieAuth: [] }, { orgSlugHeader: [] }],
+        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        responses: {
+          200: successResponse("Tag deleted")
         }
       }
     },
@@ -861,8 +885,10 @@ const zhSummaryByOperation: Record<string, string> = {
   "PATCH /articles/{id}/publish": "发布/取消发布文章",
   "GET /categories": "获取分类列表",
   "POST /categories": "创建分类",
+  "DELETE /categories/{id}": "删除分类",
   "GET /tags": "获取标签列表",
   "POST /tags": "创建标签",
+  "DELETE /tags/{id}": "删除标签",
   "GET /settings/public": "获取公开配置",
   "GET /settings": "获取全部配置",
   "PATCH /settings/{key}": "按 key 更新配置",

@@ -9,6 +9,7 @@ import { resolveUploadedAssetUrl } from "@/lib/env";
 
 import { articlesApi, ARTICLE_STATUS_OPTIONS } from "./api";
 import { MarkdownRichEditor } from "./markdown-rich-editor";
+import { getLocalizedTaxonomyName } from "./taxonomy-i18n";
 import type { ArticleFormValues, CategoryItem, TagItem } from "./types";
 
 type ArticleEditorFormProps = {
@@ -27,6 +28,7 @@ type DraftPayload = {
 };
 
 type UploadRequestOption = Parameters<NonNullable<UploadProps["customRequest"]>>[0];
+const ARTICLE_CONTENT_MAX_LENGTH = 5000;
 
 export const clearArticleDraft = (draftStorageKey?: string) => {
   if (!draftStorageKey || typeof window === "undefined") {
@@ -44,7 +46,7 @@ export const ArticleEditorForm = ({
   draftStorageKey,
   onSubmit
 }: ArticleEditorFormProps) => {
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
   const [form] = Form.useForm<ArticleFormValues>();
   const { message } = App.useApp();
   const restoredRef = useRef(false);
@@ -191,7 +193,7 @@ export const ArticleEditorForm = ({
         </Form.Item>
 
         <Form.Item label={t("editor.excerptField")} name="excerpt">
-          <Input.TextArea rows={3} placeholder="Short summary shown in article list" />
+          <Input.TextArea rows={3} maxLength={5000} placeholder="Short summary shown in article list" />
         </Form.Item>
 
         <Form.Item
@@ -204,6 +206,9 @@ export const ArticleEditorForm = ({
                 const length = (value ?? "").trim().length;
                 if (length < 20) {
                   throw new Error(t("editor.contentTooShort"));
+                }
+                if (length > ARTICLE_CONTENT_MAX_LENGTH) {
+                  throw new Error(t("editor.contentTooLong", { max: ARTICLE_CONTENT_MAX_LENGTH }));
                 }
               }
             }
@@ -269,7 +274,7 @@ export const ArticleEditorForm = ({
             <Select
               allowClear
               options={categories.map((item) => ({
-                label: item.name,
+                label: getLocalizedTaxonomyName(item, locale),
                 value: item.id
               }))}
             />
@@ -280,7 +285,7 @@ export const ArticleEditorForm = ({
               mode="multiple"
               allowClear
               options={tags.map((item) => ({
-                label: item.name,
+                label: getLocalizedTaxonomyName(item, locale),
                 value: item.id
               }))}
             />

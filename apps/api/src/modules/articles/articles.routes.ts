@@ -2,7 +2,7 @@ import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { asyncHandler } from "../../middlewares/async-handler.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { validate } from "../../middlewares/validate.js";
 import { ok } from "../../utils/api-response.js";
 import { AppError } from "../../utils/app-error.js";
@@ -78,6 +78,7 @@ articlesRouter.get(
 articlesRouter.post(
   "/",
   requireAuth,
+  requireAdmin,
   validate(createArticleSchema),
   asyncHandler(async (req, res) => {
     const created = await articlesService.create({
@@ -93,6 +94,7 @@ articlesRouter.post(
 articlesRouter.patch(
   "/:id",
   requireAuth,
+  requireAdmin,
   validate(articleIdParamSchema, "params"),
   validate(updateArticleSchema),
   asyncHandler(async (req, res) => {
@@ -113,6 +115,7 @@ articlesRouter.patch(
 articlesRouter.patch(
   "/:id/publish",
   requireAuth,
+  requireAdmin,
   validate(articleIdParamSchema, "params"),
   validate(publishArticleSchema),
   asyncHandler(async (req, res) => {
@@ -129,6 +132,7 @@ articlesRouter.patch(
 articlesRouter.delete(
   "/:id",
   requireAuth,
+  requireAdmin,
   validate(articleIdParamSchema, "params"),
   asyncHandler(async (req, res) => {
     const removed = await articlesService.remove(req.orgId!, req.params.id);

@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import type { Request } from "express";
 
 import { env } from "../../config/env.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { asyncHandler } from "../../middlewares/async-handler.js";
 import { ok } from "../../utils/api-response.js";
 import { AppError } from "../../utils/app-error.js";
@@ -86,6 +86,7 @@ export const uploadsRouter = Router();
 uploadsRouter.post(
   "/images",
   requireAuth,
+  requireAdmin,
   upload.single("file"),
   asyncHandler(async (req, res) => {
     if (!req.file) {

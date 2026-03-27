@@ -354,7 +354,7 @@ export const AboutPage = () => {
       <Card className="about-hero-card">
         <Row gutter={[24, 24]} align="middle">
           <Col xs={24} md={6} lg={5} style={{ textAlign: "center" }}>
-            <Avatar src={withAppBasePath("/about-avatar.svg")} size={120} />
+            <Avatar src={withAppBasePath("/about-avatar.png")} size={120} />
           </Col>
           <Col xs={24} md={18} lg={19}>
             <Space direction="vertical" size={8} style={{ width: "100%" }}>

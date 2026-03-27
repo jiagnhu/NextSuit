@@ -3,6 +3,8 @@ export type ArticleStatus = "draft" | "published" | "archived";
 export type CategoryItem = {
   id: string;
   name: string;
+  nameEn: string;
+  nameZh: string;
   slug: string;
   description?: string | null;
   _count?: {
@@ -13,10 +15,25 @@ export type CategoryItem = {
 export type TagItem = {
   id: string;
   name: string;
+  nameEn: string;
+  nameZh: string;
   slug: string;
   _count?: {
     articleTags: number;
   };
+};
+
+export type CategoryFormPayload = {
+  nameEn: string;
+  nameZh: string;
+  slug: string;
+  description?: string;
+};
+
+export type TagFormPayload = {
+  nameEn: string;
+  nameZh: string;
+  slug: string;
 };
 
 export type ArticleAuthor = {

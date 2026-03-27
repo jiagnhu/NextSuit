@@ -5,6 +5,7 @@ import {
   InfoCircleOutlined,
   LogoutOutlined,
   MailOutlined,
+  TagsOutlined,
   TeamOutlined,
   UserOutlined
 } from "@ant-design/icons";
@@ -15,6 +16,7 @@ import { useMemo, type PropsWithChildren } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { authApi } from "@/features/auth/api";
+import { isAdminUser } from "@/features/auth/permissions";
 import { useI18n } from "@/i18n/i18n-provider";
 import { withAppBasePath } from "@/lib/env";
 import { useUiStore } from "@/stores/ui-store";
@@ -33,6 +35,9 @@ const pickSelectedKey = (pathname: string) => {
   }
   if (pathname.startsWith("/content/articles")) {
     return "/content/articles";
+  }
+  if (pathname.startsWith("/content/taxonomies")) {
+    return "/content/taxonomies";
   }
   if (pathname.startsWith("/about")) {
     return "/about";
@@ -56,41 +61,62 @@ export const AppShell = ({ children }: PropsWithChildren) => {
     staleTime: 5 * 60 * 1000,
     retry: false
   });
+  const isAdmin = isAdminUser(meQuery.data);
 
   const menuItems: MenuProps["items"] = useMemo(
-    () => [
-      {
-        key: "/dashboard",
-        icon: <DashboardOutlined />,
-        label: t("nav.dashboard")
-      },
-      {
-        key: "/leads",
-        icon: <TeamOutlined />,
-        label: t("nav.leads")
-      },
-      {
-        key: "/contacts",
-        icon: <MailOutlined />,
-        label: t("nav.contacts")
-      },
-      {
-        key: "/subscribers",
-        icon: <UserOutlined />,
-        label: t("nav.subscribers")
-      },
-      {
-        key: "/content/articles",
-        icon: <FileTextOutlined />,
-        label: t("nav.articles")
-      },
-      {
-        key: "/about",
-        icon: <InfoCircleOutlined />,
-        label: t("nav.about")
+    () => {
+      const allItems: MenuProps["items"] = [
+        {
+          key: "/dashboard",
+          icon: <DashboardOutlined />,
+          label: t("nav.dashboard")
+        },
+        {
+          key: "/leads",
+          icon: <TeamOutlined />,
+          label: t("nav.leads")
+        },
+        {
+          key: "/contacts",
+          icon: <MailOutlined />,
+          label: t("nav.contacts")
+        },
+        {
+          key: "/subscribers",
+          icon: <UserOutlined />,
+          label: t("nav.subscribers")
+        },
+        {
+          key: "/content/articles",
+          icon: <FileTextOutlined />,
+          label: t("nav.articles")
+        },
+        {
+          key: "/content/taxonomies",
+          icon: <TagsOutlined />,
+          label: t("nav.taxonomies")
+        },
+        {
+          key: "/about",
+          icon: <InfoCircleOutlined />,
+          label: t("nav.about")
+        }
+      ];
+
+      if (isAdmin) {
+        return allItems;
       }
-    ],
-    [t]
+
+      const viewerAllowedKeys = new Set(["/dashboard", "/content/articles", "/about"]);
+      return allItems.filter(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          "key" in item &&
+          viewerAllowedKeys.has(String(item.key))
+      );
+    },
+    [isAdmin, t]
   );
 
   const selectedMenu = useMemo(
@@ -105,6 +131,7 @@ export const AppShell = ({ children }: PropsWithChildren) => {
       "/contacts": t("nav.contacts"),
       "/subscribers": t("nav.subscribers"),
       "/content/articles": t("nav.articles"),
+      "/content/taxonomies": t("nav.taxonomies"),
       "/about": t("nav.about")
     };
 

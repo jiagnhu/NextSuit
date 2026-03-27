@@ -24,6 +24,11 @@ React admin dashboard for NextSuit Growth Suite.
 - `/content/articles/:id/edit`
 - `/about`
 
+## Role Access
+
+- `admin`: full access to all pages and mutations.
+- `viewer`: read-only access to `/dashboard`, `/content/articles`, `/about`.
+
 ## Articles Features
 
 - Markdown rich editor with toolbar + live preview

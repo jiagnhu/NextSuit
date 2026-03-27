@@ -20,6 +20,9 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ARTICLE_STATUS_OPTIONS, articlesApi } from "@/features/articles/api";
+import { authApi } from "@/features/auth/api";
+import { isAdminUser } from "@/features/auth/permissions";
+import { getLocalizedTaxonomyName } from "@/features/articles/taxonomy-i18n";
 import type { ArticleItem, ArticleStatus } from "@/features/articles/types";
 import { useListPage } from "@/hooks/use-list-page";
 import { useI18n } from "@/i18n/i18n-provider";
@@ -32,7 +35,7 @@ const statusColorMap: Record<ArticleStatus, string> = {
 };
 
 export const ArticlesPage = () => {
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
   const { message } = App.useApp();
   const queryClient = useQueryClient();
   const { searchParams, page, pageSize, updateParams, onTableChange, buildPagination } =
@@ -53,6 +56,13 @@ export const ArticlesPage = () => {
     queryKey: ["articles", "categories"],
     queryFn: articlesApi.listCategories
   });
+  const meQuery = useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: authApi.me,
+    staleTime: 5 * 60 * 1000,
+    retry: false
+  });
+  const canManage = isAdminUser(meQuery.data);
 
   const queryKey = useMemo(
     () => ["articles", "list", { page, pageSize, status, search, category }] as const,
@@ -103,11 +113,13 @@ export const ArticlesPage = () => {
           {t("articles.title")}
         </Typography.Title>
 
-        <Link to="/content/articles/new">
-          <Button type="primary" icon={<PlusOutlined />}>
-            {t("articles.newArticle")}
-          </Button>
-        </Link>
+        {canManage ? (
+          <Link to="/content/articles/new">
+            <Button type="primary" icon={<PlusOutlined />}>
+              {t("articles.newArticle")}
+            </Button>
+          </Link>
+        ) : null}
       </Space>
 
       <Card>
@@ -135,7 +147,7 @@ export const ArticlesPage = () => {
             options={[
               { label: t("articles.allCategories"), value: "" },
               ...(categoriesQuery.data ?? []).map((item) => ({
-                label: item.name,
+                label: getLocalizedTaxonomyName(item, locale),
                 value: item.slug
               }))
             ]}
@@ -164,19 +176,23 @@ export const ArticlesPage = () => {
             {
               title: t("articles.table.title"),
               dataIndex: "title",
-              minWidth:200,
+              minWidth: 200,
               render: (_title, record) => (
                 <div>
-                  <Link to={`/content/articles/${record.id}/edit`}>
-                    <Typography.Text
-                      style={{
-                        color: "#1677ff",
-                        cursor: "pointer"
-                      }}
-                    >
-                      {record.title}
-                    </Typography.Text>
-                  </Link>
+                  {canManage ? (
+                    <Link to={`/content/articles/${record.id}/edit`}>
+                      <Typography.Text
+                        style={{
+                          color: "#1677ff",
+                          cursor: "pointer"
+                        }}
+                      >
+                        {record.title}
+                      </Typography.Text>
+                    </Link>
+                  ) : (
+                    <Typography.Text>{record.title}</Typography.Text>
+                  )}
                   <Typography.Text type="secondary" style={{ display: "block", fontSize: 12 }}>
                     /{record.slug}
                   </Typography.Text>
@@ -186,7 +202,8 @@ export const ArticlesPage = () => {
             {
               title: t("articles.table.category"),
               width: 140,
-              render: (_, record) => record.category?.name ?? "-"
+              render: (_, record) =>
+                record.category ? getLocalizedTaxonomyName(record.category, locale) : "-"
             },
             {
               title: t("articles.table.tags"),
@@ -195,7 +212,7 @@ export const ArticlesPage = () => {
                 record.articleTags.length ? (
                   <Space size={[4, 4]} wrap>
                     {record.articleTags.map((tagRef) => (
-                      <Tag key={tagRef.tag.id}>{tagRef.tag.name}</Tag>
+                      <Tag key={tagRef.tag.id}>{getLocalizedTaxonomyName(tagRef.tag, locale)}</Tag>
                     ))}
                   </Space>
                 ) : (
@@ -217,6 +234,7 @@ export const ArticlesPage = () => {
                   checked={record.status === "published"}
                   checkedChildren="ON"
                   unCheckedChildren="OFF"
+                  disabled={!canManage}
                   loading={publishMutation.isPending}
                   onChange={(checked) =>
                     publishMutation.mutate({
@@ -241,22 +259,26 @@ export const ArticlesPage = () => {
                   <Button size="small" onClick={() => setActiveArticle(record)}>
                     {t("articles.viewDetail")}
                   </Button>
-                  <Link to={`/content/articles/${record.id}/edit`}>
-                    <Button icon={<EditOutlined />} size="small">
-                      {t("common.edit")}
-                    </Button>
-                  </Link>
-                  <Popconfirm
-                    title={t("articles.deleteTitle")}
-                    description={t("articles.deleteDescription")}
-                    okText={t("common.delete")}
-                    okButtonProps={{ danger: true }}
-                    onConfirm={() => deleteMutation.mutate(record.id)}
-                  >
-                    <Button size="small" danger loading={deleteMutation.isPending}>
-                      {t("common.delete")}
-                    </Button>
-                  </Popconfirm>
+                  {canManage ? (
+                    <Link to={`/content/articles/${record.id}/edit`}>
+                      <Button icon={<EditOutlined />} size="small">
+                        {t("common.edit")}
+                      </Button>
+                    </Link>
+                  ) : null}
+                  {canManage ? (
+                    <Popconfirm
+                      title={t("articles.deleteTitle")}
+                      description={t("articles.deleteDescription")}
+                      okText={t("common.delete")}
+                      okButtonProps={{ danger: true }}
+                      onConfirm={() => deleteMutation.mutate(record.id)}
+                    >
+                      <Button size="small" danger loading={deleteMutation.isPending}>
+                        {t("common.delete")}
+                      </Button>
+                    </Popconfirm>
+                  ) : null}
                 </Space>
               )
             }
@@ -280,7 +302,7 @@ export const ArticlesPage = () => {
               column={2}
               items={[
                 { key: "title", label: t("articles.table.title"), children: activeArticle.title },
-                { key: "slug", label: "Slug", children: activeArticle.slug },
+                { key: "slug", label: t("editor.slugField"), children: activeArticle.slug },
                 {
                   key: "status",
                   label: t("common.status"),
@@ -294,13 +316,17 @@ export const ArticlesPage = () => {
                 {
                   key: "category",
                   label: t("articles.table.category"),
-                  children: activeArticle.category?.name ?? "-"
+                  children: activeArticle.category
+                    ? getLocalizedTaxonomyName(activeArticle.category, locale)
+                    : "-"
                 },
                 {
                   key: "tags",
                   label: t("articles.table.tags"),
                   children: activeArticle.articleTags.length
-                    ? activeArticle.articleTags.map((item) => item.tag.name).join(", ")
+                    ? activeArticle.articleTags
+                        .map((item) => getLocalizedTaxonomyName(item.tag, locale))
+                        .join(", ")
                     : "-"
                 },
                 {

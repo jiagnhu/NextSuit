@@ -32,6 +32,7 @@ export const messages: Record<Locale, Messages> = {
       contacts: "Contacts",
       subscribers: "Subscribers",
       articles: "Articles",
+      taxonomies: "Taxonomies",
       about: "About"
     },
     shell: {
@@ -43,7 +44,8 @@ export const messages: Record<Locale, Messages> = {
     },
     auth: {
       loginTitle: "SuiteOps Admin Login",
-      loginHint: "Use seeded account: admin@nextsuit.dev / Admin123!",
+      loginHint:
+        "Seeded accounts: admin@nextsuit.dev / Admin123! (Administrator), visitor@nextsuit.dev / Visitor123! (Viewer)",
       email: "Email",
       password: "Password",
       loginButton: "Log In",
@@ -176,6 +178,40 @@ export const messages: Record<Locale, Messages> = {
         archived: "Archived"
       }
     },
+    taxonomies: {
+      title: "Categories & Tags",
+      deleteTitle: "Delete item",
+      deleteDescription: "This action cannot be undone. Continue?",
+      fields: {
+        localizedName: "Localized Name",
+        nameZh: "Name (Chinese)",
+        nameEn: "Name (English)",
+        nameZhRequired: "Please input Chinese name",
+        nameEnRequired: "Please input English name",
+        slug: "Slug",
+        slugRequired: "Please input slug",
+        slugPattern: "Slug supports lowercase letters, numbers and hyphen",
+        description: "Description",
+        descriptionPlaceholder: "Optional category description",
+        usage: "Usage"
+      },
+      categories: {
+        title: "Categories",
+        create: "Create Category",
+        created: "Category created",
+        createFailed: "Failed to create category",
+        deleted: "Category deleted",
+        deleteFailed: "Failed to delete category"
+      },
+      tags: {
+        title: "Tags",
+        create: "Create Tag",
+        created: "Tag created",
+        createFailed: "Failed to create tag",
+        deleted: "Tag deleted",
+        deleteFailed: "Failed to delete tag"
+      }
+    },
     editor: {
       title: "Article Editor",
       autoSave: "Draft auto-save",
@@ -200,6 +236,7 @@ export const messages: Record<Locale, Messages> = {
       slugPattern: "Slug supports lowercase letters, numbers and hyphen",
       contentRequired: "Please input content",
       contentTooShort: "Content must be at least 20 characters",
+      contentTooLong: "Content must be at most {max} characters",
       uploadSuccess: "Cover uploaded",
       uploadFailed: "Upload failed"
     }
@@ -231,6 +268,7 @@ export const messages: Record<Locale, Messages> = {
       contacts: "联系表单",
       subscribers: "订阅用户",
       articles: "文章",
+      taxonomies: "分类与标签",
       about: "关于"
     },
     shell: {
@@ -242,7 +280,8 @@ export const messages: Record<Locale, Messages> = {
     },
     auth: {
       loginTitle: "SuiteOps 管理端登录",
-      loginHint: "使用 seed 账号：admin@nextsuit.dev / Admin123!",
+      loginHint:
+        "使用 seed 账号：admin@nextsuit.dev / Admin123!（管理员），visitor@nextsuit.dev / Visitor123!（游客）",
       email: "邮箱",
       password: "密码",
       loginButton: "登录",
@@ -375,6 +414,40 @@ export const messages: Record<Locale, Messages> = {
         archived: "已归档"
       }
     },
+    taxonomies: {
+      title: "分类与标签",
+      deleteTitle: "删除选项",
+      deleteDescription: "删除后不可恢复，确认继续吗？",
+      fields: {
+        localizedName: "当前语言显示",
+        nameZh: "中文名称",
+        nameEn: "英文名称",
+        nameZhRequired: "请输入中文名称",
+        nameEnRequired: "请输入英文名称",
+        slug: "Slug",
+        slugRequired: "请输入 slug",
+        slugPattern: "slug 仅支持小写字母、数字和中横线",
+        description: "描述",
+        descriptionPlaceholder: "分类描述（可选）",
+        usage: "使用量"
+      },
+      categories: {
+        title: "分类",
+        create: "新增分类",
+        created: "分类已创建",
+        createFailed: "创建分类失败",
+        deleted: "分类已删除",
+        deleteFailed: "删除分类失败"
+      },
+      tags: {
+        title: "标签",
+        create: "新增标签",
+        created: "标签已创建",
+        createFailed: "创建标签失败",
+        deleted: "标签已删除",
+        deleteFailed: "删除标签失败"
+      }
+    },
     editor: {
       title: "文章编辑器",
       autoSave: "草稿自动保存",
@@ -382,7 +455,7 @@ export const messages: Record<Locale, Messages> = {
       draftRestored: "已恢复本地草稿",
       draftCleared: "本地草稿已清除",
       titleField: "标题",
-      slugField: "Slug",
+      slugField: "URL 标识（Slug）",
       excerptField: "摘要",
       contentField: "正文（Markdown）",
       coverImage: "封面图",
@@ -395,10 +468,11 @@ export const messages: Record<Locale, Messages> = {
       seoTitle: "SEO 标题",
       seoDescription: "SEO 描述",
       titleRequired: "请输入标题",
-      slugRequired: "请输入 slug",
-      slugPattern: "slug 仅支持小写字母、数字和中横线",
+      slugRequired: "请输入 URL 标识（slug）",
+      slugPattern: "URL 标识仅支持小写字母、数字和中横线",
       contentRequired: "请输入正文内容",
       contentTooShort: "正文至少 20 个字符",
+      contentTooLong: "正文最多 {max} 个字符",
       uploadSuccess: "封面图片上传成功",
       uploadFailed: "上传失败"
     }

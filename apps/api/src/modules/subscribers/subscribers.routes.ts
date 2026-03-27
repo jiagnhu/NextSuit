@@ -2,7 +2,7 @@ import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { asyncHandler } from "../../middlewares/async-handler.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { publicFormRateLimit } from "../../middlewares/public-rate-limit.js";
 import { validate } from "../../middlewares/validate.js";
 import { ok } from "../../utils/api-response.js";
@@ -30,6 +30,7 @@ subscribersRouter.post(
 subscribersRouter.get(
   "/",
   requireAuth,
+  requireAdmin,
   validate(subscriberListQuerySchema, "query"),
   asyncHandler(async (req, res) => {
     const result = await subscribersService.list({ orgId: req.orgId!, ...req.query });
@@ -40,6 +41,7 @@ subscribersRouter.get(
 subscribersRouter.patch(
   "/:id/status",
   requireAuth,
+  requireAdmin,
   validate(subscriberIdParamSchema, "params"),
   validate(subscriberStatusSchema),
   asyncHandler(async (req, res) => {

@@ -55,8 +55,8 @@ export const LoginPage = () => {
           layout="vertical"
           form={form}
           initialValues={{
-            email: "admin@nextsuit.dev",
-            password: "Admin123!"
+            email: "visitor@nextsuit.dev",
+            password: "Visitor123!"
           }}
           onFinish={(values) => loginMutation.mutate(values)}
         >

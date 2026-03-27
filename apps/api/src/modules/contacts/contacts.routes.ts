@@ -2,7 +2,7 @@ import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { asyncHandler } from "../../middlewares/async-handler.js";
-import { requireAuth } from "../../middlewares/auth.js";
+import { requireAdmin, requireAuth } from "../../middlewares/auth.js";
 import { publicFormRateLimit } from "../../middlewares/public-rate-limit.js";
 import { validate } from "../../middlewares/validate.js";
 import { ok } from "../../utils/api-response.js";
@@ -37,6 +37,7 @@ contactsRouter.post(
 contactsRouter.get(
   "/",
   requireAuth,
+  requireAdmin,
   validate(contactListQuerySchema, "query"),
   asyncHandler(async (req, res) => {
     const result = await contactsService.list({ orgId: req.orgId!, ...req.query });
@@ -47,6 +48,7 @@ contactsRouter.get(
 contactsRouter.patch(
   "/:id/status",
   requireAuth,
+  requireAdmin,
   validate(contactIdParamSchema, "params"),
   validate(contactStatusSchema),
   asyncHandler(async (req, res) => {

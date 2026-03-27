@@ -6,6 +6,7 @@ declare global {
       userId: string;
       orgId: string;
       email: string;
+      roles?: string[];
     }
 
     interface Request {

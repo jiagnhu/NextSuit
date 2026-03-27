@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const ARTICLE_TEXT_MAX_LENGTH = 5000;
+
 export const articleListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional(),
   pageSize: z.coerce.number().int().min(1).max(50).optional(),
@@ -27,8 +29,8 @@ export const articleIdParamSchema = z.object({
 export const createArticleSchema = z.object({
   title: z.string().min(5).max(180),
   slug: z.string().min(3).max(180).regex(/^[a-z0-9-]+$/),
-  excerpt: z.string().max(300).optional(),
-  contentMd: z.string().min(20),
+  excerpt: z.string().max(ARTICLE_TEXT_MAX_LENGTH).optional(),
+  contentMd: z.string().min(20).max(ARTICLE_TEXT_MAX_LENGTH),
   coverImage: z.string().url().optional(),
   status: z.enum(["draft", "published", "archived"]).optional(),
   categoryId: z.string().uuid().optional(),

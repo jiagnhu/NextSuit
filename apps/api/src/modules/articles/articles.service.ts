@@ -53,6 +53,8 @@ const articleInclude = {
     select: {
       id: true,
       name: true,
+      nameEn: true,
+      nameZh: true,
       slug: true
     }
   },
@@ -62,6 +64,8 @@ const articleInclude = {
         select: {
           id: true,
           name: true,
+          nameEn: true,
+          nameZh: true,
           slug: true
         }
       }

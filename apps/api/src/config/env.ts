@@ -16,7 +16,20 @@ const envSchema = z.object({
   PUBLIC_BASE_PATH: z.string().default(""),
   DEFAULT_ORG_SLUG: z.string().default("nextsuit-demo"),
   ADMIN_EMAIL: z.string().email().default("admin@nextsuit.dev"),
-  ADMIN_PASSWORD: z.string().min(8).default("Admin123!")
+  ADMIN_PASSWORD: z.string().min(8).default("Admin123!"),
+  VIEWER_EMAIL: z.string().email().default("visitor@nextsuit.dev"),
+  VIEWER_PASSWORD: z.string().min(8).default("Visitor123!"),
+  BLOG_BASE_URL: z.string().url().default("http://localhost:18633"),
+  RESEND_API_KEY: z.string().min(10).optional(),
+  RESEND_FROM_EMAIL: z.string().email().default("onboarding@resend.dev"),
+  RESEND_REPLY_TO: z.string().email().optional(),
+  WEEKLY_DIGEST_ENABLED: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
+  WEEKLY_DIGEST_SEND_HOUR: z.coerce.number().int().min(0).max(23).default(9),
+  WEEKLY_DIGEST_TIMEZONE: z.string().default("Asia/Shanghai"),
+  WEEKLY_DIGEST_TEST_EMAIL: z.string().email().optional()
 });
 
 const parsed = envSchema.safeParse(process.env);
