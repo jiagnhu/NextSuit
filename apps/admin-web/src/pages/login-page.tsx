@@ -47,9 +47,9 @@ export const LoginPage = () => {
         <Typography.Title level={3} style={{ marginTop: 0 }}>
           {t("auth.loginTitle")}
         </Typography.Title>
-        <Typography.Paragraph type="secondary">
+        {/* <Typography.Paragraph type="secondary">
           {t("auth.loginHint")}
-        </Typography.Paragraph>
+        </Typography.Paragraph> */}
 
         <Form
           layout="vertical"
